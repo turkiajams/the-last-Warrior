@@ -8,6 +8,23 @@ class Personaje:
         self.nivel = 1
         self.experiencia = 0
         self.experiencia_para_siguiente_nivel = 100
+    
+    def modificar_defensa(self, cantidad):
+    defensa_anterior = self.defensa
+    self.defensa += cantidad
+    if self.defensa < 0:
+        self.defensa = 0
+    print(f"{self.nombre} ha modificado su defensa en {cantidad} puntos. Su defensa actual es {self.defensa}.")
+    
+    # Calcular si se reduce el ataque debido a la defensa modificada
+    defensa_efectiva = self.defensa - (self.defensa // 15) * 3
+    if self.defensa > defensa_anterior and defensa_efectiva < self.defensa:
+        print(f"Debido al aumento de defensa, {self.nombre} ha reducido su ataque en {self.ataque - (defensa_efectiva // 2)} puntos.")
+        self.ataque = defensa_efectiva // 2
+    elif self.defensa < defensa_anterior and defensa_efectiva > self.defensa:
+        print(f"Debido a la reducción de defensa, {self.nombre} ha aumentado su ataque en {(defensa_anterior - defensa_efectiva) // 2} puntos.")
+        self.ataque = defensa_efectiva // 2
+
 
     def level_up(self):
         if self.experiencia >= self.experiencia_para_siguiente_nivel:
@@ -48,26 +65,25 @@ class Personaje:
 import random
 
 class Monstruo:
-    def __init__(self, nivel_personaje):
-        self.nivel = random.randint(max(nivel_personaje-2, 1), nivel_personaje)
+    def __init__(self, personaje):
+        self.nivel = random.randint(max(personaje.nivel-2, 1), personaje.nivel)
         self.vida = 80 + self.nivel * 10
         self.ataque = 20 + self.nivel * 5
         self.defensa = 30 + self.nivel * 3
 
-    class Acciones:
-        def atacar(self, enemigo):
-            dano = self.ataque - enemigo.defensa
-            if dano < 0:
-                dano = 0
-            enemigo.vida -= dano
-            if enemigo.vida < 0:
-                enemigo.vida = 0
+    def atacar(self, enemigo):
+        dano = self.ataque - enemigo.defensa
+        if dano < 0:
+            dano = 0
+        enemigo.vida -= dano
+        if enemigo.vida < 0:
+            enemigo.vida = 0
 
-        def recibir_ataque(self, enemigo):
-            defensa_efectiva = self.defensa - (self.defensa // 20) * 3
-            dano = enemigo.ataque - defensa_efectiva
-            if dano < 0:
-                dano = 0
-            self.vida -= dano
-            if self.vida < 0:
-                self.vida = 0       
+    def recibir_ataque(self, enemigo):
+        defensa_efectiva = self.defensa - (self.defensa // 20) * 3
+        dano = enemigo.ataque - defensa_efectiva
+        if dano < 0:
+            dano = 0
+        self.vida -= dano
+        if self.vida < 0:
+            self.vida = 0
