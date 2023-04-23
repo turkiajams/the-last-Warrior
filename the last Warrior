@@ -1,36 +1,36 @@
 class Personaje:
-    def __init__(self, nombre, salud, ataque, defensa):
+    def __init__(self, nombre):
         self.nombre = nombre
-        self.salud = salud
-        self.ataque = ataque
-        self.defensa = defensa
-        self.objetos_equipados = {
-            "Arma": None,
-            "Casco": None,
-            "Armadura": None,
-            "Botas": None,
-            "Escudo": None,
-            "Daga": None
-        }
-
-    def equipar_objeto(self, objeto):
-        if objeto.tipo in self.objetos_equipados:
-            if self.objetos_equipados[objeto.tipo] is not None:
-                self.desequipar_objeto(self.objetos_equipados[objeto.tipo])
-            self.objetos_equipados[objeto.tipo] = objeto
-            self.ataque += objeto.bonus_ataque
-            self.defensa += objeto.bonus_defensa
-
-    def desequipar_objeto(self, objeto):
-        if objeto.tipo in self.objetos_equipados:
-            if self.objetos_equipados[objeto.tipo] == objeto:
-                self.objetos_equipados[objeto.tipo] = None
-                self.ataque -= objeto.bonus_ataque
-                self.defensa -= objeto.bonus_defensa
-
-class Objeto:
-    def __init__(self, nombre, tipo, bonus_ataque, bonus_defensa):
-        self.nombre = nombre
-        self.tipo = tipo
-        self.bonus_ataque = bonus_ataque
-        self.bonus_defensa = bonus_defensa
+        self.vida = 100
+        self.energia = 50
+        self.ataque = 25
+        self.defensa = 40
+        self.nivel = 1
+        self.experiencia = 0
+        self.experiencia_necesaria = 100
+    def aumentar_nivel(self):
+        self.nivel += 1
+        self.vida += 10
+        self.energia += 5
+        self.ataque += 5
+        self.defensa += 5
+        self.experiencia_necesaria *= 1.5
+        self.experiencia = 0
+    def recibir_ataque(self, enemigo):
+        defensa_efectiva = self.defensa - (self.defensa // 20) * 3
+        dano = enemigo.ataque - defensa_efectiva
+        if dano < 0:
+            dano = 0
+        self.vida -= dano
+        if self.vida < 0:
+            self.vida = 0    
+class acciones:
+     def atacar(self, enemigo):
+        dano = self.ataque - enemigo.defensa
+        if dano < 0:
+            dano = 0
+        enemigo.vida -= dano
+        self.energia -= 10
+        if enemigo.vida < 0:
+            enemigo.vida = 0
+         
