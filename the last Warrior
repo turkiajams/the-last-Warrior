@@ -1,4 +1,4 @@
-
+class Personaje:
     def __init__(self, nombre):
         self.nombre = nombre
         self.vida = 100
@@ -7,7 +7,7 @@
         self.defensa = 40
         self.nivel = 1
         self.experiencia = 0
-        self.experiencia_necesaria = 100
+        self.experiencia_para_siguiente_nivel = 100
 
     def level_up(self):
         if self.experiencia >= self.experiencia_para_siguiente_nivel:
@@ -19,17 +19,16 @@
             self.ataque += 5
             self.defensa += 5
 
-class acciones:
-     def atacar(self, enemigo):
+    def atacar(self, enemigo):
         dano = self.ataque - enemigo.defensa
-        if dano < class Personaje:0:
+        if dano < 0:
             dano = 0
         enemigo.vida -= dano
         self.energia -= 10
         if enemigo.vida < 0:
             enemigo.vida = 0
 
-     def recibir_ataque(self, enemigo):
+    def recibir_ataque(self, enemigo):
         defensa_efectiva = self.defensa - (self.defensa // 20) * 3
         dano = enemigo.ataque - defensa_efectiva
         if dano < 0:
@@ -38,7 +37,7 @@ class acciones:
         if self.vida < 0:
             self.vida = 0  
 
-     def defender(self):
+    def defender(self):
         if self.energia < 5:
             print("No tienes suficiente energía para realizar esta acción.")
             return
@@ -46,46 +45,29 @@ class acciones:
         self.energia -= 5
         print(f"{self.nombre} ha aumentado su defensa en 10 puntos. Su defensa actual es {self.defensa}.")
 
-     
+import random
+
 class Monstruo:
     def __init__(self, nivel_personaje):
-        self.vida = 60 + (nivel_personaje - 1) * 10
-        self.dano = 20 + (nivel_personaje - 1) * 5
-        self.energia = 30 + (nivel_personaje - 1) * 5
-        self.defensa = 20 + (nivel_personaje - 1) * 5
-        self.nivel = nivel_personaje - 2 if nivel_personaje > 3 else 1
-        self.experiencia = 10 * self.nivel
-    
-    def atacar(self, personaje):
-        dano_realizado = self.dano - personaje.defensa
-        if dano_realizado < 0:
-            dano_realizado = 0
-        personaje.vida -= dano_realizado
-        print(f"{self.__class__.__name__} ha atacado a {personaje.nombre} por {dano_realizado} puntos de daño.")
-    
-    def recibir_dano(self, dano):
-        self.vida -= dano
-        print(f"{self.__class__.__name__} ha recibido {dano} puntos de daño.")
-        if self.vida <= 0:
-            print(f"{self.__class__.__name__} ha sido derrotado!")
-    
-    def auto_regular_vida(self, nivel_personaje):
-        nivel_monstruo = self.nivel
-        if nivel_monstruo >= nivel_personaje + 3:
-            self.vida = 60 + (nivel_personaje + 2) * 10
-        elif nivel_monstruo <= nivel_personaje - 2:
-            self.vida = 60 + (nivel_personaje - 3) * 10
-    
-    def dar_experiencia(self):
-        experiencia = self.experiencia
-        print(f"{self.__class__.__name__} ha dado {experiencia} puntos de experiencia.")
-        return experiencia
-    def __init__(self, nivel_personaje):
-        self.vida = 60 + (nivel_personaje - 1) * 10
-        self.dano = 20 + (nivel_personaje - 1) * 5
-        self.energia = 30 + (nivel_personaje - 1) * 5
-        self.defensa = 20 + (nivel_personaje - 1) * 5
-        self.nivel = nivel_personaje - 2 if nivel_personaje > 3 else 1
-        self.experiencia = 10 * self.nivel 
+        self.nivel = random.randint(max(nivel_personaje-2, 1), nivel_personaje)
+        self.vida = 80 + self.nivel * 10
+        self.ataque = 20 + self.nivel * 5
+        self.defensa = 30 + self.nivel * 3
 
-        
+    class Acciones:
+        def atacar(self, enemigo):
+            dano = self.ataque - enemigo.defensa
+            if dano < 0:
+                dano = 0
+            enemigo.vida -= dano
+            if enemigo.vida < 0:
+                enemigo.vida = 0
+
+        def recibir_ataque(self, enemigo):
+            defensa_efectiva = self.defensa - (self.defensa // 20) * 3
+            dano = enemigo.ataque - defensa_efectiva
+            if dano < 0:
+                dano = 0
+            self.vida -= dano
+            if self.vida < 0:
+                self.vida = 0       
