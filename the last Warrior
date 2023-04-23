@@ -8,22 +8,17 @@ class Personaje:
         self.nivel = 1
         self.experiencia = 0
         self.experiencia_necesaria = 100
-    def aumentar_nivel(self):
-        self.nivel += 1
-        self.vida += 10
-        self.energia += 5
-        self.ataque += 5
-        self.defensa += 5
-        self.experiencia_necesaria *= 1.5
-        self.experiencia = 0
-    def recibir_ataque(self, enemigo):
-        defensa_efectiva = self.defensa - (self.defensa // 20) * 3
-        dano = enemigo.ataque - defensa_efectiva
-        if dano < 0:
-            dano = 0
-        self.vida -= dano
-        if self.vida < 0:
-            self.vida = 0    
+
+    def level_up(self):
+        if self.experiencia >= self.experiencia_para_siguiente_nivel:
+            self.nivel += 1
+            self.experiencia -= self.experiencia_para_siguiente_nivel
+            self.experiencia_para_siguiente_nivel = int(self.experiencia_para_siguiente_nivel * 1.2)
+            self.vida += 10
+            self.energia += 5
+            self.ataque += 5
+            self.defensa += 5
+
 class acciones:
      def atacar(self, enemigo):
         dano = self.ataque - enemigo.defensa
@@ -33,4 +28,30 @@ class acciones:
         self.energia -= 10
         if enemigo.vida < 0:
             enemigo.vida = 0
-         
+
+     def recibir_ataque(self, enemigo):
+        defensa_efectiva = self.defensa - (self.defensa // 20) * 3
+        dano = enemigo.ataque - defensa_efectiva
+        if dano < 0:
+            dano = 0
+        self.vida -= dano
+        if self.vida < 0:
+            self.vida = 0  
+
+     def defender(self):
+        if self.energia < 5:
+            print("No tienes suficiente energía para realizar esta acción.")
+            return
+        self.defensa += 10
+        self.energia -= 5
+        print(f"{self.nombre} ha aumentado su defensa en 10 puntos. Su defensa actual es {self.defensa}.")
+
+     def curar(self):
+        if self.energia < 20:
+            print("No tienes suficiente energía para realizar esta acción.")
+            return
+        curacion_maxima = 100 - self.vida
+        curacion = 15 if curacion_maxima >= 15 else curacion_maxima
+        self.vida += curacion
+        self.energia -= 20
+        print(f"{self.nombre} se ha curado en {curacion} puntos de vida. Su vida actual es {self.vida}.")
