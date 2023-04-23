@@ -1,4 +1,4 @@
-class Personaje:
+
     def __init__(self, nombre):
         self.nombre = nombre
         self.vida = 100
@@ -22,7 +22,7 @@ class Personaje:
 class acciones:
      def atacar(self, enemigo):
         dano = self.ataque - enemigo.defensa
-        if dano < 0:
+        if dano < class Personaje:0:
             dano = 0
         enemigo.vida -= dano
         self.energia -= 10
@@ -46,12 +46,46 @@ class acciones:
         self.energia -= 5
         print(f"{self.nombre} ha aumentado su defensa en 10 puntos. Su defensa actual es {self.defensa}.")
 
-     def curar(self):
-        if self.energia < 20:
-            print("No tienes suficiente energía para realizar esta acción.")
-            return
-        curacion_maxima = 100 - self.vida
-        curacion = 15 if curacion_maxima >= 15 else curacion_maxima
-        self.vida += curacion
-        self.energia -= 20
-        print(f"{self.nombre} se ha curado en {curacion} puntos de vida. Su vida actual es {self.vida}.")
+     
+class Monstruo:
+    def __init__(self, nivel_personaje):
+        self.vida = 60 + (nivel_personaje - 1) * 10
+        self.dano = 20 + (nivel_personaje - 1) * 5
+        self.energia = 30 + (nivel_personaje - 1) * 5
+        self.defensa = 20 + (nivel_personaje - 1) * 5
+        self.nivel = nivel_personaje - 2 if nivel_personaje > 3 else 1
+        self.experiencia = 10 * self.nivel
+    
+    def atacar(self, personaje):
+        dano_realizado = self.dano - personaje.defensa
+        if dano_realizado < 0:
+            dano_realizado = 0
+        personaje.vida -= dano_realizado
+        print(f"{self.__class__.__name__} ha atacado a {personaje.nombre} por {dano_realizado} puntos de daño.")
+    
+    def recibir_dano(self, dano):
+        self.vida -= dano
+        print(f"{self.__class__.__name__} ha recibido {dano} puntos de daño.")
+        if self.vida <= 0:
+            print(f"{self.__class__.__name__} ha sido derrotado!")
+    
+    def auto_regular_vida(self, nivel_personaje):
+        nivel_monstruo = self.nivel
+        if nivel_monstruo >= nivel_personaje + 3:
+            self.vida = 60 + (nivel_personaje + 2) * 10
+        elif nivel_monstruo <= nivel_personaje - 2:
+            self.vida = 60 + (nivel_personaje - 3) * 10
+    
+    def dar_experiencia(self):
+        experiencia = self.experiencia
+        print(f"{self.__class__.__name__} ha dado {experiencia} puntos de experiencia.")
+        return experiencia
+    def __init__(self, nivel_personaje):
+        self.vida = 60 + (nivel_personaje - 1) * 10
+        self.dano = 20 + (nivel_personaje - 1) * 5
+        self.energia = 30 + (nivel_personaje - 1) * 5
+        self.defensa = 20 + (nivel_personaje - 1) * 5
+        self.nivel = nivel_personaje - 2 if nivel_personaje > 3 else 1
+        self.experiencia = 10 * self.nivel 
+
+        
